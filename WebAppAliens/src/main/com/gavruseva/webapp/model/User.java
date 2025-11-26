@@ -21,7 +21,7 @@ public class User extends AbstractModel{
   private UserRole role;
   private UserStatus status;
 
-  private User() {
+  public User() {
   }
 
   public String getLogin() {

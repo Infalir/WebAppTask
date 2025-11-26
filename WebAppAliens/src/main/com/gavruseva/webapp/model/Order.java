@@ -6,7 +6,6 @@ import java.util.Objects;
 public class Order extends AbstractModel{
   public enum OrderStatus{
     COMPLETE,
-    CONFIRMED,
     CREATED,
     CANCELLED
   }
@@ -17,7 +16,7 @@ public class Order extends AbstractModel{
 
   private long inkId;
 
-  private long bodyPartId;
+  private String bodyPart;
 
   private double orderPrice;
 
@@ -37,8 +36,8 @@ public class Order extends AbstractModel{
     return inkId;
   }
 
-  public long getBodyPartId(){
-    return bodyPartId;
+  public String getBodyPartId(){
+    return bodyPart;
   }
 
   public double getOrderPrice(){
@@ -61,7 +60,7 @@ public class Order extends AbstractModel{
     Order order = (Order) obj;
     return super.equals(order) && Objects.equals(order.orderStatus, orderStatus)
             && order.userId == userId && order.imageId == imageId
-            && order.inkId == inkId && order.bodyPartId == bodyPartId
+            && order.inkId == inkId && Objects.equals(order.bodyPart, bodyPart)
             && order.orderPrice == orderPrice;
   }
 
@@ -74,7 +73,7 @@ public class Order extends AbstractModel{
     result = prime * result + Long.hashCode(userId);
     result = prime * result + Long.hashCode(imageId);
     result = prime * result + Long.hashCode(inkId);
-    result = prime * result + Long.hashCode(bodyPartId);
+    result = prime * result + (bodyPart != null ? bodyPart.hashCode() : 0);
     result = prime * result + Double.hashCode(orderPrice);
 
     return result;
@@ -87,7 +86,7 @@ public class Order extends AbstractModel{
     builder.append("Order status = ").append(orderStatus).append(", ");
     builder.append("Image ID = ").append(imageId).append(", ");
     builder.append("User ID = ").append(userId).append(", ");
-    builder.append("Body Part ID = ").append(bodyPartId).append(")");
+    builder.append("Body Part = ").append(bodyPart).append(")");
     builder.append("Ink ID = ").append(inkId).append(", ");
     builder.append("Order price = ").append(orderPrice).append(")");
 
