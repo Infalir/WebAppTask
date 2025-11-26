@@ -1,11 +1,13 @@
 package main.com .gavruseva.webapp.dao.impl;
 
-import main.com.gavruseva.webapp.dao.BasicDao;
+import main.com.gavruseva.webapp.dao.BaseDao;
 import main.com.gavruseva.webapp.dao.constant.UserTableConstants;
 import main.com.gavruseva.webapp.exception.ConnectionException;
 import main.com.gavruseva.webapp.exception.DAOException;
 import main.com.gavruseva.webapp.model.User;
 import main.com.gavruseva.webapp.connection.ConnectionPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDao implements BasicDao<User> {
-
+public class UserDao implements BaseDao<User> {
+  private static final Logger logger = LogManager.getLogger();
   private static final String FIND_BY_ID_QUERY = "SELECT id, email, login, password_hash, status, role FROM users WHERE id = ? LIMIT 1";
   private static final String INSERT_QUERY = "INSERT INTO users (email, login, password_hash, status, role) VALUES (?, ?, ?, ?, ?)";
   private static final String DELETE_QUERY = "DELETE FROM users WHERE id = ?";
@@ -32,6 +34,7 @@ public class UserDao implements BasicDao<User> {
       ResultSet resultSet = pStmt.executeQuery();
 
       if (!resultSet.next()) {
+        logger.warn("No User with ID = {} has been found", id);
         return Optional.empty();
       }
 
@@ -42,7 +45,9 @@ public class UserDao implements BasicDao<User> {
       user.setPasswordHash(resultSet.getBytes(UserTableConstants.PASSWORD_HASH.getFieldName()));
       user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableConstants.STATUS.getFieldName())));
       user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableConstants.ROLE.getFieldName())));
+      logger.info("User {} has been found", user);
     } catch (SQLException e) {
+      logger.error("Couldn't connect to a database", e);
       throw new DAOException("Couldn't connect to a database", e);
     }
 
@@ -61,7 +66,9 @@ public class UserDao implements BasicDao<User> {
       pStmt.setString(4, user.getStatus().toString());
       pStmt.setString(5, user.getRole().toString());
       rowsAffected = pStmt.executeUpdate();
+      logger.info("{} rows have been affected during Insert", rowsAffected);
     } catch (SQLException e) {
+      logger.error("Couldn't insert the User", e);
       throw new DAOException("Could not insert the User", e);
     }
     return rowsAffected;
@@ -78,7 +85,9 @@ public class UserDao implements BasicDao<User> {
       pStmt.setString(5, user.getStatus().toString());
       pStmt.setLong(6, user.getModelId());
       rowsAffected = pStmt.executeUpdate();
+      logger.info("{} rows have been affected during Update", rowsAffected);
     } catch (SQLException e) {
+      logger.error("Couldn't update the User", e);
       throw new DAOException(e);
     }
     return rowsAffected;
@@ -90,7 +99,9 @@ public class UserDao implements BasicDao<User> {
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(DELETE_QUERY)) {
       pStmt.setLong(1, id);
       rowsAffected = pStmt.executeUpdate();
+      logger.info("{} rows have been affected during Delete", rowsAffected);
     } catch (SQLException e) {
+      logger.error("Couldn't update the User", e);
       throw new DAOException(e);
     }
     return rowsAffected;
@@ -103,7 +114,9 @@ public class UserDao implements BasicDao<User> {
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(GET_ALL_QUERY)) {
       ResultSet resultSet = pStmt.executeQuery();
       users = getUserListByResultSet(resultSet);
+      logger.info("{} Users in the table", users.size());
     } catch (SQLException e) {
+      logger.error("Couldn't retrieve all Users", e);
       throw new DAOException(e);
     }
 

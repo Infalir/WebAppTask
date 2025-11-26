@@ -1,7 +1,10 @@
 package main.com.gavruseva.webapp.model;
 
+import lombok.Setter;
+
 import java.util.Objects;
 
+@Setter
 public class Image extends AbstractModel {
   private String picturePath;
 
@@ -13,7 +16,7 @@ public class Image extends AbstractModel {
 
   private double price;
 
-  private Image(){}
+  public Image(){}
 
   public String getPicturePath() {
     return picturePath;

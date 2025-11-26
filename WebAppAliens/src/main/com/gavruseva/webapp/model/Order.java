@@ -1,8 +1,11 @@
 package main.com.gavruseva.webapp.model;
 
+import lombok.Setter;
+
 import java.util.Arrays;
 import java.util.Objects;
 
+@Setter
 public class Order extends AbstractModel{
   public enum OrderStatus{
     COMPLETE,
@@ -22,7 +25,7 @@ public class Order extends AbstractModel{
 
   private OrderStatus orderStatus;
 
-  private Order(){}
+  public Order(){}
 
   public long getUserId(){
     return userId;
@@ -36,7 +39,7 @@ public class Order extends AbstractModel{
     return inkId;
   }
 
-  public String getBodyPartId(){
+  public String getBodyPart(){
     return bodyPart;
   }
 

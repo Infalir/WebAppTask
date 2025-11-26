@@ -1,7 +1,10 @@
 package main.com.gavruseva.webapp.model;
 
+import lombok.Setter;
+
 import java.util.Objects;
 
+@Setter
 public class Ink extends AbstractModel {
   private String color;
 
@@ -11,9 +14,9 @@ public class Ink extends AbstractModel {
 
   private String allergen;
 
-  private Ink(){}
+  public Ink(){}
 
-  public String getPicturePath() {
+  public String getColor() {
     return color;
   }
 
@@ -21,11 +24,11 @@ public class Ink extends AbstractModel {
     return name;
   }
 
-  public String getWidth() {
+  public String getManufacturer() {
     return manufacturer;
   }
 
-  public String getLength() {
+  public String getAllergen() {
     return allergen;
   }
 

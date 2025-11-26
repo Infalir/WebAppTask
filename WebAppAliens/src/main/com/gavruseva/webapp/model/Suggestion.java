@@ -1,7 +1,10 @@
 package main.com.gavruseva.webapp.model;
 
+import lombok.Setter;
+
 import java.util.Objects;
 
+@Setter
 public class Suggestion extends AbstractModel{
   public enum SuggestionStatus{
     ACCEPTED,

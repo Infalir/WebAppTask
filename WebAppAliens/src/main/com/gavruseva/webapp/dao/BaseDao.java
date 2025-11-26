@@ -6,7 +6,7 @@ import main.com.gavruseva.webapp.exception.DAOException;
 import java.util.List;
 import java.util.Optional;
 
-public interface BasicDao<T> {
+public interface BaseDao<T> {
   Optional<T> findById(Long id) throws DAOException, ConnectionException;
   int insert(T t) throws DAOException, ConnectionException;
   int update(T t)throws DAOException, ConnectionException;

@@ -81,33 +81,32 @@ public class ConnectionPool {
     }
   }
 
-  public Connection getConnection() {
+  public Connection getConnection() throws ConnectionException {
     try {
       Connection connection = freeConnections.take();
       takenConnections.offer(connection);
-      logger.info("Connection was taken, the are free connection " + freeConnections.size());
+      logger.info("Connection was taken. Connections available {} ", freeConnections.size());
       return connection;
     } catch (InterruptedException e) {
-      throw new RuntimeException("Can not get database", e);
+      logger.error("Could not get a connection to the database", e);
+      throw new ConnectionException("Can not get database", e);
     }
   }
 
   public void releaseConnection(Connection connection) {
     takenConnections.remove(connection);
     freeConnections.offer(connection);
-    logger.info("Connection was released, the are free connection " + freeConnections.size());
+    logger.info("Connection was released. Connections available {} ", freeConnections.size());
   }
 
-  public void destroy() {
+  public void destroy() throws ConnectionException {
     for (int i = 0; i < freeConnections.size(); i++) {
       try {
         Connection connection = (Connection) freeConnections.take();
         connection.close();
-      } catch (InterruptedException e) {
-        logger.error("Connection close exception", e);
-      } catch (SQLException e) {
-        logger.error("database is not closed", e);
-        throw new RuntimeException("database is not closed", e);
+      } catch (InterruptedException | SQLException e) {
+        logger.error("Couldn't close connection while destroying the pool", e);
+        throw new ConnectionException("Couldn't close connection while destroying the pool", e);
       }
     }
     try {
@@ -117,7 +116,7 @@ public class ConnectionPool {
         DriverManager.deregisterDriver(driver);
       }
     } catch (SQLException e) {
-      logger.error("Drivers were not deregistrated", e);
+      logger.error("Drivers could not be unregistered", e);
     }
   }
 }
