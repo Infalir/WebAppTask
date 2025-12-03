@@ -1,6 +1,6 @@
 package main.com.gavruseva.webapp.connection;
 
-public enum ConnectionConstants {
+public enum ConnectionParameters {
   URL("db.url"),
   POOLSIZE("db.poolsize"),
   USER("db.user"),
@@ -8,7 +8,7 @@ public enum ConnectionConstants {
 
   private String propertyName;
 
-  private ConnectionConstants(String propertyName) {
+  private ConnectionParameters(String propertyName) {
     this.propertyName = propertyName;
   }
 

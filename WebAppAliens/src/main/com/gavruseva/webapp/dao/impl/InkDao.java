@@ -2,10 +2,9 @@ package main.com.gavruseva.webapp.dao.impl;
 
 import main.com.gavruseva.webapp.connection.ConnectionPool;
 import main.com.gavruseva.webapp.dao.BaseDao;
-import main.com.gavruseva.webapp.dao.constant.InkTableConstants;
+import main.com.gavruseva.webapp.dao.columnNames.InkTableColumnNames;
 import main.com.gavruseva.webapp.exception.ConnectionException;
 import main.com.gavruseva.webapp.exception.DAOException;
-import main.com.gavruseva.webapp.model.Ink;
 import main.com.gavruseva.webapp.model.Ink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,11 +39,11 @@ public class InkDao implements BaseDao<Ink> {
       }
 
       ink = new Ink();
-      ink.setModelId(resultSet.getLong(InkTableConstants.ID.getFieldName()));
-      ink.setName(resultSet.getString(InkTableConstants.NAME.getFieldName()));
-      ink.setColor(resultSet.getString(InkTableConstants.COLOR.getFieldName()));
-      ink.setAllergen(resultSet.getString(InkTableConstants.ALLERGEN.getFieldName()));
-      ink.setManufacturer(resultSet.getString(InkTableConstants.MANUFACTURER.getFieldName()));
+      ink.setModelId(resultSet.getLong(InkTableColumnNames.ID.getFieldName()));
+      ink.setName(resultSet.getString(InkTableColumnNames.NAME.getFieldName()));
+      ink.setColor(resultSet.getString(InkTableColumnNames.COLOR.getFieldName()));
+      ink.setAllergen(resultSet.getString(InkTableColumnNames.ALLERGEN.getFieldName()));
+      ink.setManufacturer(resultSet.getString(InkTableColumnNames.MANUFACTURER.getFieldName()));
       logger.info("Ink {} has been found", ink);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
@@ -127,11 +126,11 @@ public class InkDao implements BaseDao<Ink> {
 
     while (resultSet.next()) {
       Ink ink = new Ink();
-      ink.setModelId(resultSet.getLong(InkTableConstants.ID.getFieldName()));
-      ink.setName(resultSet.getString(InkTableConstants.NAME.getFieldName()));
-      ink.setColor(resultSet.getString(InkTableConstants.COLOR.getFieldName()));
-      ink.setManufacturer(resultSet.getString(InkTableConstants.MANUFACTURER.getFieldName()));
-      ink.setAllergen(resultSet.getString(InkTableConstants.ALLERGEN.getFieldName()));
+      ink.setModelId(resultSet.getLong(InkTableColumnNames.ID.getFieldName()));
+      ink.setName(resultSet.getString(InkTableColumnNames.NAME.getFieldName()));
+      ink.setColor(resultSet.getString(InkTableColumnNames.COLOR.getFieldName()));
+      ink.setManufacturer(resultSet.getString(InkTableColumnNames.MANUFACTURER.getFieldName()));
+      ink.setAllergen(resultSet.getString(InkTableColumnNames.ALLERGEN.getFieldName()));
       inks.add(ink);
     }
 

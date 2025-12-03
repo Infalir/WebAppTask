@@ -17,7 +17,7 @@ public class User extends AbstractModel{
 
   private String email;
   private String login;
-  private byte[] passwordHash;
+  private String passwordHash;
   private UserRole role;
   private UserStatus status;
 
@@ -40,11 +40,11 @@ public class User extends AbstractModel{
     this.email = email;
   }
 
-  public byte[] getPasswordHash() {
+  public String getPasswordHash() {
     return passwordHash;
   }
 
-  public void setPasswordHash(byte[] passwordHash) {
+  public void setPasswordHash(String passwordHash) {
     this.passwordHash = passwordHash;
   }
 
@@ -75,7 +75,7 @@ public class User extends AbstractModel{
 
     User user = (User) obj;
     return super.equals(user) && Objects.equals(user.login, login) && Objects.equals(user.email, email)
-            && Arrays.equals(user.passwordHash, passwordHash)  && Objects.equals(user.role, role)
+            && Objects.equals(user.passwordHash, passwordHash)  && Objects.equals(user.role, role)
             && Objects.equals(user.status, status);
   }
 
@@ -86,7 +86,7 @@ public class User extends AbstractModel{
 
     result = prime * result + (login != null ? login.hashCode() : 0);
     result = prime * result + (email != null ? email.hashCode() : 0);
-    result = prime * result + (passwordHash != null ? Arrays.hashCode(passwordHash) : 0);
+    result = prime * result + (passwordHash != null ? Objects.hashCode(passwordHash) : 0);
     result = prime * result + (role != null ? role.hashCode() : 0);
     result = prime * result + (status != null ? status.hashCode() : 0);
 

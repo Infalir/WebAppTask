@@ -1,7 +1,7 @@
 package main.com .gavruseva.webapp.dao.impl;
 
 import main.com.gavruseva.webapp.dao.BaseDao;
-import main.com.gavruseva.webapp.dao.constant.UserTableConstants;
+import main.com.gavruseva.webapp.dao.columnNames.UserTableColumnNames;
 import main.com.gavruseva.webapp.exception.ConnectionException;
 import main.com.gavruseva.webapp.exception.DAOException;
 import main.com.gavruseva.webapp.model.User;
@@ -18,11 +18,21 @@ import java.util.Optional;
 
 public class UserDao implements BaseDao<User> {
   private static final Logger logger = LogManager.getLogger();
+  private static UserDao instance;
   private static final String FIND_BY_ID_QUERY = "SELECT id, email, login, password_hash, status, role FROM users WHERE id = ? LIMIT 1";
   private static final String INSERT_QUERY = "INSERT INTO users (email, login, password_hash, status, role) VALUES (?, ?, ?, ?, ?)";
   private static final String DELETE_QUERY = "DELETE FROM users WHERE id = ?";
   private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, password_hash = ?, role = ?, status = ? WHERE id = ?";
   private static final String GET_ALL_QUERY = "SELECT id, email, login, password_hash, status, role FROM users";
+  private static final String LOGIN_QUERY = "SELECT login, password_hash, role FROM users WHERE login = ?";
+  private static final String LOGIN_CHECK_QUERY = "SELECT login FROM users WHERE login = ?";
+
+  public static UserDao getInstance() {
+    if (instance == null) {
+      instance = new UserDao();
+    }
+    return instance;
+  }
 
   @Override
   public Optional<User> findById(Long id) throws DAOException, ConnectionException {
@@ -39,12 +49,12 @@ public class UserDao implements BaseDao<User> {
       }
 
       user = new User();
-      user.setModelId(resultSet.getLong(UserTableConstants.ID.getFieldName()));
-      user.setEmail(resultSet.getString(UserTableConstants.EMAIL.getFieldName()));
-      user.setLogin(resultSet.getString(UserTableConstants.LOGIN.getFieldName()));
-      user.setPasswordHash(resultSet.getBytes(UserTableConstants.PASSWORD_HASH.getFieldName()));
-      user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableConstants.STATUS.getFieldName())));
-      user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableConstants.ROLE.getFieldName())));
+      user.setModelId(resultSet.getLong(UserTableColumnNames.ID.getFieldName()));
+      user.setEmail(resultSet.getString(UserTableColumnNames.EMAIL.getFieldName()));
+      user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
+      user.setPasswordHash(resultSet.getBytes(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableColumnNames.STATUS.getFieldName())));
+      user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
       logger.info("User {} has been found", user);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
@@ -57,7 +67,7 @@ public class UserDao implements BaseDao<User> {
 
 
   @Override
-  public int insert(User user) throws DAOException, ConnectionException{
+  public int insert(User user) throws DAOException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, user.getEmail());
@@ -129,15 +139,58 @@ public class UserDao implements BaseDao<User> {
 
     while (resultSet.next()) {
       User user = new User();
-      user.setModelId(resultSet.getLong(UserTableConstants.ID.getFieldName()));
-      user.setEmail(resultSet.getString(UserTableConstants.EMAIL.getFieldName()));
-      user.setLogin(resultSet.getString(UserTableConstants.LOGIN.getFieldName()));
-      user.setPasswordHash(resultSet.getBytes(UserTableConstants.PASSWORD_HASH.getFieldName()));
-      user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableConstants.ROLE.getFieldName())));
-      user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableConstants.STATUS.getFieldName())));
+      user.setModelId(resultSet.getLong(UserTableColumnNames.ID.getFieldName()));
+      user.setEmail(resultSet.getString(UserTableColumnNames.EMAIL.getFieldName()));
+      user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
+      user.setPasswordHash(resultSet.getBytes(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
+      user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableColumnNames.STATUS.getFieldName())));
       users.add(user);
     }
 
     return users;
+  }
+
+  public Optional<User> login(String login, String password) throws DAOException {
+    User user = null;
+
+    try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(LOGIN_QUERY)) {
+      pStmt.setString(1, login);
+
+      ResultSet resultSet = pStmt.executeQuery();
+
+      if (!resultSet.next()) {
+        logger.warn("No User with login = {} has been found", login);
+        return Optional.empty();
+      }
+
+      user = new User();
+      user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
+      user.setPasswordHash(resultSet.getBytes(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
+      logger.info("User {} has been found and logged in", user);
+    } catch (SQLException e) {
+      logger.error("Couldn't connect to a database", e);
+      throw new DAOException("Couldn't connect to a database", e);
+    }
+
+    return Optional.of(user);
+  }
+
+  public String findLogin(String login) throws DAOException {
+    try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(LOGIN_CHECK_QUERY)) {
+      pStmt.setString(1, login);
+
+      ResultSet resultSet = pStmt.executeQuery();
+
+      if (resultSet.next()) {
+        logger.warn("User with login = {} already exists, please try another one", login);
+        return resultSet.getString(UserTableColumnNames.LOGIN.getFieldName());
+      }
+      return null;
+    } catch (SQLException e) {
+      logger.error("Couldn't connect to a database", e);
+      throw new DAOException("Couldn't connect to a database", e);
+    }
   }
 }

@@ -1,6 +1,6 @@
-package main.com.gavruseva.webapp.dao.constant;
+package main.com.gavruseva.webapp.dao.columnNames;
 
-public enum ImageTableConstants {
+public enum ImageTableColumnNames {
   ID("id"),
   PICTURE_PATH("picture_path"),
   NAME("name"),
@@ -10,7 +10,7 @@ public enum ImageTableConstants {
 
   private String fieldName;
 
-  private ImageTableConstants(String fieldName) {
+  private ImageTableColumnNames(String fieldName) {
     this.fieldName = fieldName;
   }
 

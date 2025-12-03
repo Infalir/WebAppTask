@@ -2,10 +2,9 @@ package main.com.gavruseva.webapp.dao.impl;
 
 import main.com.gavruseva.webapp.connection.ConnectionPool;
 import main.com.gavruseva.webapp.dao.BaseDao;
-import main.com.gavruseva.webapp.dao.constant.OrderTableConstants;
+import main.com.gavruseva.webapp.dao.columnNames.OrderTableColumnNames;
 import main.com.gavruseva.webapp.exception.ConnectionException;
 import main.com.gavruseva.webapp.exception.DAOException;
-import main.com.gavruseva.webapp.model.Order;
 import main.com.gavruseva.webapp.model.Order;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,13 +39,13 @@ public class OrderDao implements BaseDao<Order> {
       }
 
       order = new Order();
-      order.setModelId(resultSet.getLong(OrderTableConstants.ID.getFieldName()));
-      order.setImageId(resultSet.getLong(OrderTableConstants.IMAGE_ID.getFieldName()));
-      order.setUserId(resultSet.getLong(OrderTableConstants.USER_ID.getFieldName()));
-      order.setInkId(resultSet.getLong(OrderTableConstants.INK_ID.getFieldName()));
-      order.setBodyPart(resultSet.getString(OrderTableConstants.BODYPART.getFieldName()));
-      order.setOrderStatus(Order.OrderStatus.valueOf(resultSet.getString(OrderTableConstants.ORDER_STATUS.getFieldName())));
-      order.setOrderPrice(resultSet.getDouble(OrderTableConstants.ORDER_PRICE.getFieldName()));
+      order.setModelId(resultSet.getLong(OrderTableColumnNames.ID.getFieldName()));
+      order.setImageId(resultSet.getLong(OrderTableColumnNames.IMAGE_ID.getFieldName()));
+      order.setUserId(resultSet.getLong(OrderTableColumnNames.USER_ID.getFieldName()));
+      order.setInkId(resultSet.getLong(OrderTableColumnNames.INK_ID.getFieldName()));
+      order.setBodyPart(resultSet.getString(OrderTableColumnNames.BODYPART.getFieldName()));
+      order.setOrderStatus(Order.OrderStatus.valueOf(resultSet.getString(OrderTableColumnNames.ORDER_STATUS.getFieldName())));
+      order.setOrderPrice(resultSet.getDouble(OrderTableColumnNames.ORDER_PRICE.getFieldName()));
       logger.info("Order {} has been found", order);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
@@ -133,13 +132,13 @@ public class OrderDao implements BaseDao<Order> {
 
     while (resultSet.next()) {
       Order order = new Order();
-      order.setModelId(resultSet.getLong(OrderTableConstants.ID.getFieldName()));
-      order.setImageId(resultSet.getLong(OrderTableConstants.IMAGE_ID.getFieldName()));
-      order.setUserId(resultSet.getLong(OrderTableConstants.USER_ID.getFieldName()));
-      order.setInkId(resultSet.getLong(OrderTableConstants.INK_ID.getFieldName()));
-      order.setBodyPart(resultSet.getString(OrderTableConstants.BODYPART.getFieldName()));
-      order.setOrderPrice(resultSet.getDouble(OrderTableConstants.ORDER_PRICE.getFieldName()));
-      order.setOrderStatus(Order.OrderStatus.valueOf(resultSet.getString(OrderTableConstants.ORDER_STATUS.getFieldName())));
+      order.setModelId(resultSet.getLong(OrderTableColumnNames.ID.getFieldName()));
+      order.setImageId(resultSet.getLong(OrderTableColumnNames.IMAGE_ID.getFieldName()));
+      order.setUserId(resultSet.getLong(OrderTableColumnNames.USER_ID.getFieldName()));
+      order.setInkId(resultSet.getLong(OrderTableColumnNames.INK_ID.getFieldName()));
+      order.setBodyPart(resultSet.getString(OrderTableColumnNames.BODYPART.getFieldName()));
+      order.setOrderPrice(resultSet.getDouble(OrderTableColumnNames.ORDER_PRICE.getFieldName()));
+      order.setOrderStatus(Order.OrderStatus.valueOf(resultSet.getString(OrderTableColumnNames.ORDER_STATUS.getFieldName())));
       orders.add(order);
     }
 

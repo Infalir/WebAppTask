@@ -1,6 +1,6 @@
-package main.com.gavruseva.webapp.dao.constant;
+package main.com.gavruseva.webapp.dao.columnNames;
 
-public enum UserTableConstants {
+public enum UserTableColumnNames {
   ID("id"),
   EMAIL("email"),
   LOGIN("login"),
@@ -10,7 +10,7 @@ public enum UserTableConstants {
 
   private String fieldName;
 
-  private UserTableConstants(String fieldName) {
+  private UserTableColumnNames(String fieldName) {
     this.fieldName = fieldName;
   }
 

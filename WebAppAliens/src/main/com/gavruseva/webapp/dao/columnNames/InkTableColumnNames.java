@@ -1,6 +1,6 @@
-package main.com.gavruseva.webapp.dao.constant;
+package main.com.gavruseva.webapp.dao.columnNames;
 
-public enum InkTableConstants {
+public enum InkTableColumnNames {
   ID("id"),
   NAME("name"),
   COLOR("color"),
@@ -9,7 +9,7 @@ public enum InkTableConstants {
 
   private String fieldName;
 
-  private InkTableConstants(String fieldName) {
+  private InkTableColumnNames(String fieldName) {
     this.fieldName = fieldName;
   }
 

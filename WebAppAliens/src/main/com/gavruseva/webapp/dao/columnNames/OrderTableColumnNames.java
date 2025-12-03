@@ -1,6 +1,6 @@
-package main.com.gavruseva.webapp.dao.constant;
+package main.com.gavruseva.webapp.dao.columnNames;
 
-public enum OrderTableConstants {
+public enum OrderTableColumnNames {
   ID("id"),
   IMAGE_ID("picture_path"),
   USER_ID("user_id"),
@@ -11,7 +11,7 @@ public enum OrderTableConstants {
 
   private String fieldName;
 
-  private OrderTableConstants(String fieldName) {
+  private OrderTableColumnNames(String fieldName) {
     this.fieldName = fieldName;
   }
 

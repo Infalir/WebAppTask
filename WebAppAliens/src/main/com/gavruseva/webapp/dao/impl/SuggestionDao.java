@@ -2,10 +2,9 @@ package main.com.gavruseva.webapp.dao.impl;
 
 import main.com.gavruseva.webapp.connection.ConnectionPool;
 import main.com.gavruseva.webapp.dao.BaseDao;
-import main.com.gavruseva.webapp.dao.constant.SuggestionTableConstants;
+import main.com.gavruseva.webapp.dao.columnNames.SuggestionTableColumnNames;
 import main.com.gavruseva.webapp.exception.ConnectionException;
 import main.com.gavruseva.webapp.exception.DAOException;
-import main.com.gavruseva.webapp.model.Suggestion;
 import main.com.gavruseva.webapp.model.Suggestion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,12 +38,12 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
       }
 
       suggestion = new Suggestion();
-      suggestion.setModelId(resultSet.getLong(SuggestionTableConstants.ID.getFieldName()));
-      suggestion.setPicturePath(resultSet.getString(SuggestionTableConstants.PICTURE_PATH.getFieldName()));
-      suggestion.setStatus(Suggestion.SuggestionStatus.valueOf(resultSet.getString(SuggestionTableConstants.SUGGESTION_STATUS.getFieldName())));
-      suggestion.setLength(resultSet.getDouble(SuggestionTableConstants.LENGTH.getFieldName()));
-      suggestion.setWidth(resultSet.getDouble(SuggestionTableConstants.WIDTH.getFieldName()));
-      suggestion.setUserId(resultSet.getLong(SuggestionTableConstants.USER_ID.getFieldName()));
+      suggestion.setModelId(resultSet.getLong(SuggestionTableColumnNames.ID.getFieldName()));
+      suggestion.setPicturePath(resultSet.getString(SuggestionTableColumnNames.PICTURE_PATH.getFieldName()));
+      suggestion.setStatus(Suggestion.SuggestionStatus.valueOf(resultSet.getString(SuggestionTableColumnNames.SUGGESTION_STATUS.getFieldName())));
+      suggestion.setLength(resultSet.getDouble(SuggestionTableColumnNames.LENGTH.getFieldName()));
+      suggestion.setWidth(resultSet.getDouble(SuggestionTableColumnNames.WIDTH.getFieldName()));
+      suggestion.setUserId(resultSet.getLong(SuggestionTableColumnNames.USER_ID.getFieldName()));
       logger.info("Suggestion {} has been found", suggestion);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
@@ -129,12 +128,12 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
 
     while (resultSet.next()) {
       Suggestion suggestion = new Suggestion();
-      suggestion.setModelId(resultSet.getLong(SuggestionTableConstants.ID.getFieldName()));
-      suggestion.setPicturePath(resultSet.getString(SuggestionTableConstants.PICTURE_PATH.getFieldName()));
-      suggestion.setStatus(Suggestion.SuggestionStatus.valueOf(resultSet.getString(SuggestionTableConstants.SUGGESTION_STATUS.getFieldName())));
-      suggestion.setLength(resultSet.getDouble(SuggestionTableConstants.LENGTH.getFieldName()));
-      suggestion.setUserId(resultSet.getLong(SuggestionTableConstants.USER_ID.getFieldName()));
-      suggestion.setWidth(resultSet.getDouble(SuggestionTableConstants.WIDTH.getFieldName()));
+      suggestion.setModelId(resultSet.getLong(SuggestionTableColumnNames.ID.getFieldName()));
+      suggestion.setPicturePath(resultSet.getString(SuggestionTableColumnNames.PICTURE_PATH.getFieldName()));
+      suggestion.setStatus(Suggestion.SuggestionStatus.valueOf(resultSet.getString(SuggestionTableColumnNames.SUGGESTION_STATUS.getFieldName())));
+      suggestion.setLength(resultSet.getDouble(SuggestionTableColumnNames.LENGTH.getFieldName()));
+      suggestion.setUserId(resultSet.getLong(SuggestionTableColumnNames.USER_ID.getFieldName()));
+      suggestion.setWidth(resultSet.getDouble(SuggestionTableColumnNames.WIDTH.getFieldName()));
       suggestions.add(suggestion);
     }
 

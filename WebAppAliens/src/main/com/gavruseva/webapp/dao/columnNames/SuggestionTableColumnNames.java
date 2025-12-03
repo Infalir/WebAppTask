@@ -1,6 +1,6 @@
-package main.com.gavruseva.webapp.dao.constant;
+package main.com.gavruseva.webapp.dao.columnNames;
 
-public enum SuggestionTableConstants {
+public enum SuggestionTableColumnNames {
   ID("id"),
   PICTURE_PATH("picture_path"),
   USER_ID("user_id"),
@@ -10,7 +10,7 @@ public enum SuggestionTableConstants {
 
   private String fieldName;
 
-  private SuggestionTableConstants(String fieldName) {
+  private SuggestionTableColumnNames(String fieldName) {
     this.fieldName = fieldName;
   }
 

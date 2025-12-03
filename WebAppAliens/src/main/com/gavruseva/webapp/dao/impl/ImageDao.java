@@ -2,7 +2,7 @@ package main.com.gavruseva.webapp.dao.impl;
 
 import main.com.gavruseva.webapp.connection.ConnectionPool;
 import main.com.gavruseva.webapp.dao.BaseDao;
-import main.com.gavruseva.webapp.dao.constant.ImageTableConstants;
+import main.com.gavruseva.webapp.dao.columnNames.ImageTableColumnNames;
 import main.com.gavruseva.webapp.exception.ConnectionException;
 import main.com.gavruseva.webapp.exception.DAOException;
 import main.com.gavruseva.webapp.model.Image;
@@ -39,12 +39,12 @@ public class ImageDao implements BaseDao<Image> {
       }
 
       image = new Image();
-      image.setModelId(resultSet.getLong(ImageTableConstants.ID.getFieldName()));
-      image.setPicturePath(resultSet.getString(ImageTableConstants.PICTURE_PATH.getFieldName()));
-      image.setName(resultSet.getString(ImageTableConstants.NAME.getFieldName()));
-      image.setLength(resultSet.getDouble(ImageTableConstants.LENGTH.getFieldName()));
-      image.setWidth(resultSet.getDouble(ImageTableConstants.WIDTH.getFieldName()));
-      image.setPrice(resultSet.getDouble(ImageTableConstants.PRICE.getFieldName()));
+      image.setModelId(resultSet.getLong(ImageTableColumnNames.ID.getFieldName()));
+      image.setPicturePath(resultSet.getString(ImageTableColumnNames.PICTURE_PATH.getFieldName()));
+      image.setName(resultSet.getString(ImageTableColumnNames.NAME.getFieldName()));
+      image.setLength(resultSet.getDouble(ImageTableColumnNames.LENGTH.getFieldName()));
+      image.setWidth(resultSet.getDouble(ImageTableColumnNames.WIDTH.getFieldName()));
+      image.setPrice(resultSet.getDouble(ImageTableColumnNames.PRICE.getFieldName()));
       logger.info("Image {} has been found", image);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
@@ -129,12 +129,12 @@ public class ImageDao implements BaseDao<Image> {
 
     while (resultSet.next()) {
       Image image = new Image();
-      image.setModelId(resultSet.getLong(ImageTableConstants.ID.getFieldName()));
-      image.setPicturePath(resultSet.getString(ImageTableConstants.PICTURE_PATH.getFieldName()));
-      image.setName(resultSet.getString(ImageTableConstants.NAME.getFieldName()));
-      image.setLength(resultSet.getDouble(ImageTableConstants.LENGTH.getFieldName()));
-      image.setPrice(resultSet.getDouble(ImageTableConstants.PRICE.getFieldName()));
-      image.setWidth(resultSet.getDouble(ImageTableConstants.WIDTH.getFieldName()));
+      image.setModelId(resultSet.getLong(ImageTableColumnNames.ID.getFieldName()));
+      image.setPicturePath(resultSet.getString(ImageTableColumnNames.PICTURE_PATH.getFieldName()));
+      image.setName(resultSet.getString(ImageTableColumnNames.NAME.getFieldName()));
+      image.setLength(resultSet.getDouble(ImageTableColumnNames.LENGTH.getFieldName()));
+      image.setPrice(resultSet.getDouble(ImageTableColumnNames.PRICE.getFieldName()));
+      image.setWidth(resultSet.getDouble(ImageTableColumnNames.WIDTH.getFieldName()));
       images.add(image);
     }
 
