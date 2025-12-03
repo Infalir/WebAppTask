@@ -52,7 +52,7 @@ public class UserDao implements BaseDao<User> {
       user.setModelId(resultSet.getLong(UserTableColumnNames.ID.getFieldName()));
       user.setEmail(resultSet.getString(UserTableColumnNames.EMAIL.getFieldName()));
       user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
-      user.setPasswordHash(resultSet.getBytes(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setPasswordHash(resultSet.getString(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
       user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableColumnNames.STATUS.getFieldName())));
       user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
       logger.info("User {} has been found", user);
@@ -72,7 +72,7 @@ public class UserDao implements BaseDao<User> {
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, user.getEmail());
       pStmt.setString(2, user.getLogin());
-      pStmt.setBytes(3, user.getPasswordHash());
+      pStmt.setString(3, user.getPasswordHash());
       pStmt.setString(4, user.getStatus().toString());
       pStmt.setString(5, user.getRole().toString());
       rowsAffected = pStmt.executeUpdate();
@@ -90,7 +90,7 @@ public class UserDao implements BaseDao<User> {
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(UPDATE_QUERY)) {
       pStmt.setString(1, user.getEmail());
       pStmt.setString(2, user.getLogin());
-      pStmt.setBytes(3, user.getPasswordHash());
+      pStmt.setString(3, user.getPasswordHash());
       pStmt.setString(4, user.getRole().toString());
       pStmt.setString(5, user.getStatus().toString());
       pStmt.setLong(6, user.getModelId());
@@ -142,7 +142,7 @@ public class UserDao implements BaseDao<User> {
       user.setModelId(resultSet.getLong(UserTableColumnNames.ID.getFieldName()));
       user.setEmail(resultSet.getString(UserTableColumnNames.EMAIL.getFieldName()));
       user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
-      user.setPasswordHash(resultSet.getBytes(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setPasswordHash(resultSet.getString(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
       user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
       user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableColumnNames.STATUS.getFieldName())));
       users.add(user);
@@ -166,7 +166,7 @@ public class UserDao implements BaseDao<User> {
 
       user = new User();
       user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
-      user.setPasswordHash(resultSet.getBytes(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setPasswordHash(resultSet.getString(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
       user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
       logger.info("User {} has been found and logged in", user);
     } catch (SQLException e) {
