@@ -8,7 +8,7 @@ import main.com.gavruseva.webapp.exception.IncorrectDataException;
 import main.com.gavruseva.webapp.exception.ServiceException;
 import main.com.gavruseva.webapp.model.User;
 import main.com.gavruseva.webapp.page.Page;
-import main.com.gavruseva.webapp.service.UserService;
+import main.com.gavruseva.webapp.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,8 +31,8 @@ public class RegisterNewUserCommand implements Command {
     User user = new User();
     user.setLogin(login.get());
     user.setPasswordHash(password.get());
-    UserService userService = new UserService();
-    int userCount = userService.save(user);
+    UserServiceImpl userServiceImpl = new UserServiceImpl();
+    int userCount = userServiceImpl.save(user);
     if (userCount != 0) {
       logger.info("User was registered: login:" + login + " password:" + password);
       return forwardToLogin(request);

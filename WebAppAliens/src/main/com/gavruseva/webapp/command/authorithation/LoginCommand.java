@@ -10,7 +10,7 @@ import main.com.gavruseva.webapp.exception.IncorrectDataException;
 import main.com.gavruseva.webapp.exception.ServiceException;
 import main.com.gavruseva.webapp.model.User;
 import main.com.gavruseva.webapp.page.Page;
-import main.com.gavruseva.webapp.service.UserService;
+import main.com.gavruseva.webapp.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,8 +47,8 @@ public class LoginCommand implements Command {
   }
 
   public boolean initializeUserIfExist(String login, String password, HttpServletRequest request) throws ServiceException {
-    UserService userService = new UserService();
-    Optional<User> user = userService.login(login, password);
+    UserServiceImpl userServiceImpl = new UserServiceImpl();
+    Optional<User> user = userServiceImpl.login(login, password);
     boolean userExist = false;
     if (user.isPresent()) {
       setAttributesToSession(user.get().getLogin(), request);
