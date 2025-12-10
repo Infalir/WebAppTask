@@ -1,6 +1,7 @@
 package com.gavruseva.webapp.command.user;
 
 import com.gavruseva.webapp.exception.CommandException;
+import com.gavruseva.webapp.hasher.PasswordEncryptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -50,7 +51,7 @@ public class LoginCommand implements Command {
     boolean userExist = false;
     try {
       Optional<User> user = userServiceImpl.login(login, password);
-      if (user.isPresent()) {
+      if (user.isPresent() && PasswordEncryptor.verifyPassword(password, user.get().getPasswordHash())) {
         setAttributesToSession(user.get().getLogin(), request);
         userExist = true;
       }

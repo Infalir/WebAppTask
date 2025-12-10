@@ -1,6 +1,7 @@
 package com.gavruseva.webapp.command.user;
 
 import com.gavruseva.webapp.exception.CommandException;
+import com.gavruseva.webapp.hasher.PasswordEncryptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.gavruseva.webapp.command.Command;
@@ -30,7 +31,7 @@ public class RegisterNewUserCommand implements Command {
     }
     User user = new User();
     user.setLogin(login.get());
-    user.setPasswordHash(password.get());
+    user.setPasswordHash(PasswordEncryptor.hashPassword(password.get()));
     UserServiceImpl userServiceImpl = new UserServiceImpl();
     try {
       int userCount = userServiceImpl.save(user);
