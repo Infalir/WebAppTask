@@ -23,9 +23,10 @@ import static com.gavruseva.webapp.command.user.AuthenticationParameters.*;
 public class LoginCommand implements Command {
   private static final Logger logger = LogManager.getLogger();
 
-  private void setAttributesToSession(String name, HttpServletRequest request) {
+  private void setAttributesToSession(String name, String role, HttpServletRequest request) {
     HttpSession session = request.getSession();
     session.setAttribute(SessionAttribute.NAME, name);
+    session.setAttribute(SessionAttribute.ROLE, role);
   }
 
   @Override
@@ -52,7 +53,7 @@ public class LoginCommand implements Command {
     try {
       Optional<User> user = userServiceImpl.login(login, password);
       if (user.isPresent() && PasswordEncryptor.verifyPassword(password, user.get().getPasswordHash())) {
-        setAttributesToSession(user.get().getLogin(), request);
+        setAttributesToSession(user.get().getLogin(), user.get().getRole().name(), request);
         userExist = true;
       }
     } catch (ServiceException e) {

@@ -56,7 +56,7 @@ public class InkDao implements BaseDao<Ink> {
 
 
   @Override
-  public int insert(Ink ink) throws DAOException, ConnectionException{
+  public int insert(Ink ink) throws DAOException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, ink.getName());

@@ -7,7 +7,8 @@ public enum CommandType {
   REGISTER_NEW_USER("register_new_user"),
   ADD_NEW_PERSON("add_new_person"),
   LOGIN_PAGE("login_page"),
-  REGISTRATION_PAGE("registration_page");
+  REGISTRATION_PAGE("registration_page"),
+  CREATE_ORDER("create_order");
 
   private String command;
 

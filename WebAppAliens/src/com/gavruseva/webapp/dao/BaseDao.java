@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface BaseDao<T> {
   Optional<T> findById(Long id) throws DAOException, ConnectionException;
-  int insert(T t) throws DAOException, ConnectionException;
+  int insert(T t) throws DAOException;
   int update(T t)throws DAOException, ConnectionException;
   int delete(Long id)throws DAOException, ConnectionException;
   List<T> getAll()throws DAOException, ConnectionException;

@@ -18,14 +18,22 @@ import java.util.Optional;
 
 public class OrderDao implements BaseDao<Order> {
   private static final Logger logger = LogManager.getLogger();
+  private static OrderDao instance;
   private static final String FIND_BY_ID_QUERY = "SELECT id, order_id, user_id, ink_id, bodypart, order_status, order_price FROM orders WHERE id = ? LIMIT 1";
   private static final String INSERT_QUERY = "INSERT INTO orders (order_id, user_id, ink_id, bodypart, order_status, order_price) VALUES (?, ?, ?, ?, ?, ?)";
   private static final String DELETE_QUERY = "DELETE FROM orders WHERE id = ?";
   private static final String UPDATE_QUERY = "UPDATE orders SET order_id = ?, user_id = ?, ink_id = ?, bodypart = ?, order_status, order_price = ? WHERE id = ?";
   private static final String GET_ALL_QUERY = "SELECT id, order_id, user_id, ink_id, bodypart, order_status, order_price FROM orders";
 
+  public static OrderDao getInstance() {
+    if (instance == null) {
+      instance = new OrderDao();
+    }
+    return instance;
+  }
+
   @Override
-  public Optional<Order> findById(Long id) throws DAOException, ConnectionException {
+  public Optional<Order> findById(Long id) throws DAOException{
     Order order = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {
@@ -58,7 +66,7 @@ public class OrderDao implements BaseDao<Order> {
 
 
   @Override
-  public int insert(Order order) throws DAOException, ConnectionException{
+  public int insert(Order order) throws DAOException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setLong(1, order.getImageId());

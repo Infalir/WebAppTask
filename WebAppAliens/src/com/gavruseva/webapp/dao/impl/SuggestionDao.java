@@ -56,7 +56,7 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
 
 
   @Override
-  public int insert(Suggestion suggestion) throws DAOException, ConnectionException{
+  public int insert(Suggestion suggestion) throws DAOException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, suggestion.getPicturePath());

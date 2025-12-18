@@ -41,8 +41,19 @@ public class UserServiceImpl implements UserService {
       } else {
         return 0;
       }
-    } catch (DAOException exception) {
-      throw new ServiceException(exception.getMessage(), exception);
+    } catch (DAOException e) {
+      logger.error("Couldn't execute connection to a database", e);
+      throw new ServiceException(e.getMessage(), e);
+    }
+  }
+
+  public Optional<User> findUserByLogin(String login) throws ServiceException {
+    try{
+      return UserDao.getInstance().findByLogin(login);
+    }
+    catch (DAOException e) {
+      logger.error("Couldn't execute connection to a database", e);
+      throw new ServiceException(e.getMessage(), e);
     }
   }
 }

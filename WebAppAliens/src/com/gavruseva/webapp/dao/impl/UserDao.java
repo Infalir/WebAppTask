@@ -20,6 +20,7 @@ public class UserDao implements BaseDao<User> {
   private static final Logger logger = LogManager.getLogger();
   private static UserDao instance;
   private static final String FIND_BY_ID_QUERY = "SELECT id, email, login, password_hash, status, role FROM users WHERE id = ? LIMIT 1";
+  private static final String FIND_BY_LOGIN_QUERY = "SELECT id, email, login, password_hash, status, role FROM users WHERE login = ? LIMIT 1";
   private static final String INSERT_QUERY = "INSERT INTO users (email, login, password_hash, status, role) VALUES (?, ?, ?, ?, ?)";
   private static final String DELETE_QUERY = "DELETE FROM users WHERE id = ?";
   private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, password_hash = ?, role = ?, status = ? WHERE id = ?";
@@ -64,7 +65,34 @@ public class UserDao implements BaseDao<User> {
     return Optional.of(user);
   }
 
+  public Optional<User> findByLogin(String login) throws DAOException{
+    User user = null;
 
+    try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_LOGIN_QUERY)) {
+      pStmt.setString(1, login);
+
+      ResultSet resultSet = pStmt.executeQuery();
+
+      if (!resultSet.next()) {
+        logger.warn("No User with login = {} has been found", login);
+        return Optional.empty();
+      }
+
+      user = new User();
+      user.setModelId(resultSet.getLong(UserTableColumnNames.ID.getFieldName()));
+      user.setEmail(resultSet.getString(UserTableColumnNames.EMAIL.getFieldName()));
+      user.setLogin(resultSet.getString(UserTableColumnNames.LOGIN.getFieldName()));
+      user.setPasswordHash(resultSet.getString(UserTableColumnNames.PASSWORD_HASH.getFieldName()));
+      user.setStatus(User.UserStatus.valueOf(resultSet.getString(UserTableColumnNames.STATUS.getFieldName())));
+      user.setRole(User.UserRole.valueOf(resultSet.getString(UserTableColumnNames.ROLE.getFieldName())));
+      logger.info("User {} has been found", user);
+    } catch (SQLException e) {
+      logger.error("Couldn't connect to a database", e);
+      throw new DAOException("Couldn't connect to a database", e);
+    }
+
+    return Optional.of(user);
+  }
 
   @Override
   public int insert(User user) throws DAOException{

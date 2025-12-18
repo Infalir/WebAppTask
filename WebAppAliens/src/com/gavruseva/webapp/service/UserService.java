@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface UserService {
   Optional<User> login(String login, String password) throws ServiceException;
   Integer save(User user) throws ServiceException;
+  Optional<User> findUserByLogin(String login) throws ServiceException;
 }

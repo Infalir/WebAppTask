@@ -57,7 +57,7 @@ public class ImageDao implements BaseDao<Image> {
 
 
   @Override
-  public int insert(Image image) throws DAOException, ConnectionException{
+  public int insert(Image image) throws DAOException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, image.getPicturePath());
