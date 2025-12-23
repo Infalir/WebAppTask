@@ -3,7 +3,7 @@ package com.gavruseva.webapp.dao.impl;
 import com.gavruseva.webapp.dao.BaseDao;
 import com.gavruseva.webapp.dao.tablecolumn.UserTableColumnNames;
 import com.gavruseva.webapp.exception.ConnectionException;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.model.User;
 import com.gavruseva.webapp.connection.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +36,7 @@ public class UserDao implements BaseDao<User> {
   }
 
   @Override
-  public Optional<User> findById(Long id) throws DAOException, ConnectionException {
+  public Optional<User> findById(Long id) throws DaoException, ConnectionException {
     User user = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {
@@ -59,13 +59,13 @@ public class UserDao implements BaseDao<User> {
       logger.info("User {} has been found", user);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(user);
   }
 
-  public Optional<User> findByLogin(String login) throws DAOException{
+  public Optional<User> findByLogin(String login) throws DaoException {
     User user = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_LOGIN_QUERY)) {
@@ -88,14 +88,14 @@ public class UserDao implements BaseDao<User> {
       logger.info("User {} has been found", user);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(user);
   }
 
   @Override
-  public int insert(User user) throws DAOException{
+  public int insert(User user) throws DaoException {
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, user.getEmail());
@@ -107,13 +107,13 @@ public class UserDao implements BaseDao<User> {
       logger.info("{} rows have been affected during Insert", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't insert the User", e);
-      throw new DAOException("Could not insert the User", e);
+      throw new DaoException("Could not insert the User", e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int update(User user) throws DAOException, ConnectionException{
+  public int update(User user) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(UPDATE_QUERY)) {
       pStmt.setString(1, user.getEmail());
@@ -126,13 +126,13 @@ public class UserDao implements BaseDao<User> {
       logger.info("{} rows have been affected during Update", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the User", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int delete(Long id) throws DAOException, ConnectionException{
+  public int delete(Long id) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(DELETE_QUERY)) {
       pStmt.setLong(1, id);
@@ -140,13 +140,13 @@ public class UserDao implements BaseDao<User> {
       logger.info("{} rows have been affected during Delete", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the User", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public List<User> getAll() throws DAOException, ConnectionException {
+  public List<User> getAll() throws DaoException, ConnectionException {
     List<User> users;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(GET_ALL_QUERY)) {
@@ -155,7 +155,7 @@ public class UserDao implements BaseDao<User> {
       logger.info("{} Users in the table", users.size());
     } catch (SQLException e) {
       logger.error("Couldn't retrieve all Users", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
 
     return users;
@@ -179,7 +179,7 @@ public class UserDao implements BaseDao<User> {
     return users;
   }
 
-  public Optional<User> login(String login, String password) throws DAOException {
+  public Optional<User> login(String login, String password) throws DaoException {
     User user = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(LOGIN_QUERY)) {
@@ -199,13 +199,13 @@ public class UserDao implements BaseDao<User> {
       logger.info("User {} has been found and logged in", user);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(user);
   }
 
-  public String findLogin(String login) throws DAOException {
+  public String findLogin(String login) throws DaoException {
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(LOGIN_CHECK_QUERY)) {
       pStmt.setString(1, login);
 
@@ -218,7 +218,7 @@ public class UserDao implements BaseDao<User> {
       return null;
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
   }
 }

@@ -4,7 +4,7 @@ import com.gavruseva.webapp.connection.ConnectionPool;
 import com.gavruseva.webapp.dao.BaseDao;
 import com.gavruseva.webapp.dao.tablecolumn.SuggestionTableColumnNames;
 import com.gavruseva.webapp.exception.ConnectionException;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.model.Suggestion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
   private static final String GET_ALL_QUERY = "SELECT id, pictire_path, user_id, length, width, suggestion_status FROM suggestions";
 
   @Override
-  public Optional<Suggestion> findById(Long id) throws DAOException, ConnectionException {
+  public Optional<Suggestion> findById(Long id) throws DaoException, ConnectionException {
     Suggestion suggestion = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {
@@ -47,7 +47,7 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
       logger.info("Suggestion {} has been found", suggestion);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(suggestion);
@@ -56,7 +56,7 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
 
 
   @Override
-  public int insert(Suggestion suggestion) throws DAOException{
+  public int insert(Suggestion suggestion) throws DaoException {
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, suggestion.getPicturePath());
@@ -68,13 +68,13 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
       logger.info("{} rows have been affected during Insert", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't insert the Suggestion", e);
-      throw new DAOException("Could not insert the Suggestion", e);
+      throw new DaoException("Could not insert the Suggestion", e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int update(Suggestion suggestion) throws DAOException, ConnectionException{
+  public int update(Suggestion suggestion) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(UPDATE_QUERY)) {
       pStmt.setString(1, suggestion.getPicturePath());
@@ -87,13 +87,13 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
       logger.info("{} rows have been affected during Update", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Suggestion", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int delete(Long id) throws DAOException, ConnectionException{
+  public int delete(Long id) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(DELETE_QUERY)) {
       pStmt.setLong(1, id);
@@ -101,13 +101,13 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
       logger.info("{} rows have been affected during Delete", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Suggestion", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public List<Suggestion> getAll() throws DAOException, ConnectionException {
+  public List<Suggestion> getAll() throws DaoException, ConnectionException {
     List<Suggestion> suggestions;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(GET_ALL_QUERY)) {
@@ -116,7 +116,7 @@ public class SuggestionDao implements BaseDao<Suggestion> {  private static fina
       logger.info("{} Suggestions in the table", suggestions.size());
     } catch (SQLException e) {
       logger.error("Couldn't retrieve all Suggestions", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
 
     return suggestions;

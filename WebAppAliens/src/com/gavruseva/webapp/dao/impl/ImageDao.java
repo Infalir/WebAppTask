@@ -4,7 +4,7 @@ import com.gavruseva.webapp.connection.ConnectionPool;
 import com.gavruseva.webapp.dao.BaseDao;
 import com.gavruseva.webapp.dao.tablecolumn.ImageTableColumnNames;
 import com.gavruseva.webapp.exception.ConnectionException;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.model.Image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,7 @@ public class ImageDao implements BaseDao<Image> {
 
 
   @Override
-  public Optional<Image> findById(Long id) throws DAOException {
+  public Optional<Image> findById(Long id) throws DaoException {
     Image image = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {
@@ -57,7 +57,7 @@ public class ImageDao implements BaseDao<Image> {
       logger.info("Image {} has been found", image);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(image);
@@ -66,7 +66,7 @@ public class ImageDao implements BaseDao<Image> {
 
 
   @Override
-  public int insert(Image image) throws DAOException{
+  public int insert(Image image) throws DaoException {
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, image.getPicturePath());
@@ -78,13 +78,13 @@ public class ImageDao implements BaseDao<Image> {
       logger.info("{} rows have been affected during Insert", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't insert the Image", e);
-      throw new DAOException("Could not insert the Image", e);
+      throw new DaoException("Could not insert the Image", e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int update(Image image) throws DAOException, ConnectionException{
+  public int update(Image image) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(UPDATE_QUERY)) {
       pStmt.setString(1, image.getPicturePath());
@@ -97,13 +97,13 @@ public class ImageDao implements BaseDao<Image> {
       logger.info("{} rows have been affected during Update", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Image", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int delete(Long id) throws DAOException, ConnectionException{
+  public int delete(Long id) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(DELETE_QUERY)) {
       pStmt.setLong(1, id);
@@ -111,13 +111,13 @@ public class ImageDao implements BaseDao<Image> {
       logger.info("{} rows have been affected during Delete", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Image", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public List<Image> getAll() throws DAOException, ConnectionException {
+  public List<Image> getAll() throws DaoException, ConnectionException {
     List<Image> images;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(GET_ALL_QUERY)) {
@@ -126,7 +126,7 @@ public class ImageDao implements BaseDao<Image> {
       logger.info("{} Images in the table", images.size());
     } catch (SQLException e) {
       logger.error("Couldn't retrieve all Images", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
 
     return images;

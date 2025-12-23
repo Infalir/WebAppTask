@@ -1,7 +1,7 @@
 package com.gavruseva.webapp.service.impl;
 
 import com.gavruseva.webapp.dao.impl.UserDao;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.exception.ServiceException;
 import com.gavruseva.webapp.model.User;
 import com.gavruseva.webapp.service.UserService;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
       }
       return UserDao.getInstance().login(login, password);
-    } catch (DAOException e) {
+    } catch (DaoException e) {
       logger.error("Couldn't execute connection to a database", e);
       throw new ServiceException(e.getMessage(), e);
     }
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
       } else {
         return 0;
       }
-    } catch (DAOException e) {
+    } catch (DaoException e) {
       logger.error("Couldn't execute connection to a database", e);
       throw new ServiceException(e.getMessage(), e);
     }
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     try{
       return UserDao.getInstance().findByLogin(login);
     }
-    catch (DAOException e) {
+    catch (DaoException e) {
       logger.error("Couldn't execute connection to a database", e);
       throw new ServiceException(e.getMessage(), e);
     }

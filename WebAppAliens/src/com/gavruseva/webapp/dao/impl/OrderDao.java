@@ -4,7 +4,7 @@ import com.gavruseva.webapp.connection.ConnectionPool;
 import com.gavruseva.webapp.dao.BaseDao;
 import com.gavruseva.webapp.dao.tablecolumn.OrderTableColumnNames;
 import com.gavruseva.webapp.exception.ConnectionException;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.model.Order;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +33,7 @@ public class OrderDao implements BaseDao<Order> {
   }
 
   @Override
-  public Optional<Order> findById(Long id) throws DAOException{
+  public Optional<Order> findById(Long id) throws DaoException {
     Order order = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {
@@ -57,7 +57,7 @@ public class OrderDao implements BaseDao<Order> {
       logger.info("Order {} has been found", order);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(order);
@@ -66,7 +66,7 @@ public class OrderDao implements BaseDao<Order> {
 
 
   @Override
-  public int insert(Order order) throws DAOException{
+  public int insert(Order order) throws DaoException {
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setLong(1, order.getImageId());
@@ -79,13 +79,13 @@ public class OrderDao implements BaseDao<Order> {
       logger.info("{} rows have been affected during Insert", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't insert the Order", e);
-      throw new DAOException("Could not insert the Order", e);
+      throw new DaoException("Could not insert the Order", e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int update(Order order) throws DAOException, ConnectionException{
+  public int update(Order order) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(UPDATE_QUERY)) {
       pStmt.setLong(1, order.getImageId());
@@ -99,13 +99,13 @@ public class OrderDao implements BaseDao<Order> {
       logger.info("{} rows have been affected during Update", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Order", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int delete(Long id) throws DAOException, ConnectionException{
+  public int delete(Long id) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(DELETE_QUERY)) {
       pStmt.setLong(1, id);
@@ -113,13 +113,13 @@ public class OrderDao implements BaseDao<Order> {
       logger.info("{} rows have been affected during Delete", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Order", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public List<Order> getAll() throws DAOException, ConnectionException {
+  public List<Order> getAll() throws DaoException, ConnectionException {
     List<Order> orders;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(GET_ALL_QUERY)) {
@@ -128,7 +128,7 @@ public class OrderDao implements BaseDao<Order> {
       logger.info("{} Orders in the table", orders.size());
     } catch (SQLException e) {
       logger.error("Couldn't retrieve all Orders", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
 
     return orders;

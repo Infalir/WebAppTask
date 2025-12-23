@@ -4,7 +4,7 @@ import com.gavruseva.webapp.connection.ConnectionPool;
 import com.gavruseva.webapp.dao.BaseDao;
 import com.gavruseva.webapp.dao.tablecolumn.InkTableColumnNames;
 import com.gavruseva.webapp.exception.ConnectionException;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.model.Ink;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,7 @@ public class InkDao implements BaseDao<Ink> {
   private static final String GET_ALL_QUERY = "SELECT id, name, color, allergen, manufacturer FROM inks";
 
   @Override
-  public Optional<Ink> findById(Long id) throws DAOException, ConnectionException {
+  public Optional<Ink> findById(Long id) throws DaoException, ConnectionException {
     Ink ink = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {
@@ -47,7 +47,7 @@ public class InkDao implements BaseDao<Ink> {
       logger.info("Ink {} has been found", ink);
     } catch (SQLException e) {
       logger.error("Couldn't connect to a database", e);
-      throw new DAOException("Couldn't connect to a database", e);
+      throw new DaoException("Couldn't connect to a database", e);
     }
 
     return Optional.of(ink);
@@ -56,7 +56,7 @@ public class InkDao implements BaseDao<Ink> {
 
 
   @Override
-  public int insert(Ink ink) throws DAOException{
+  public int insert(Ink ink) throws DaoException {
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(INSERT_QUERY)) {
       pStmt.setString(1, ink.getName());
@@ -67,13 +67,13 @@ public class InkDao implements BaseDao<Ink> {
       logger.info("{} rows have been affected during Insert", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't insert the Ink", e);
-      throw new DAOException("Could not insert the Ink", e);
+      throw new DaoException("Could not insert the Ink", e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int update(Ink ink) throws DAOException, ConnectionException{
+  public int update(Ink ink) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(UPDATE_QUERY)) {
       pStmt.setString(1, ink.getName());
@@ -85,13 +85,13 @@ public class InkDao implements BaseDao<Ink> {
       logger.info("{} rows have been affected during Update", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Ink", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public int delete(Long id) throws DAOException, ConnectionException{
+  public int delete(Long id) throws DaoException, ConnectionException{
     int rowsAffected = 0;
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(DELETE_QUERY)) {
       pStmt.setLong(1, id);
@@ -99,13 +99,13 @@ public class InkDao implements BaseDao<Ink> {
       logger.info("{} rows have been affected during Delete", rowsAffected);
     } catch (SQLException e) {
       logger.error("Couldn't update the Ink", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
     return rowsAffected;
   }
 
   @Override
-  public List<Ink> getAll() throws DAOException, ConnectionException {
+  public List<Ink> getAll() throws DaoException, ConnectionException {
     List<Ink> inks;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(GET_ALL_QUERY)) {
@@ -114,7 +114,7 @@ public class InkDao implements BaseDao<Ink> {
       logger.info("{} Inks in the table", inks.size());
     } catch (SQLException e) {
       logger.error("Couldn't retrieve all Inks", e);
-      throw new DAOException(e);
+      throw new DaoException(e);
     }
 
     return inks;

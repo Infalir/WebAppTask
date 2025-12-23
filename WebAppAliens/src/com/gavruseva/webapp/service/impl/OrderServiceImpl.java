@@ -1,7 +1,7 @@
 package com.gavruseva.webapp.service.impl;
 
 import com.gavruseva.webapp.dao.impl.OrderDao;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.exception.ServiceException;
 import com.gavruseva.webapp.model.Order;
 import com.gavruseva.webapp.service.ImageService;
@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     }
     try{
       return OrderDao.getInstance().insert(order);
-    } catch (DAOException e){
+    } catch (DaoException e){
       throw new ServiceException(e.getMessage(), e);
     }
   }

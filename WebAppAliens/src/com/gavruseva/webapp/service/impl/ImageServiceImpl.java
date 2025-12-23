@@ -1,9 +1,8 @@
 package com.gavruseva.webapp.service.impl;
 
 import com.gavruseva.webapp.dao.impl.ImageDao;
-import com.gavruseva.webapp.exception.DAOException;
+import com.gavruseva.webapp.exception.DaoException;
 import com.gavruseva.webapp.exception.ServiceException;
-import com.gavruseva.webapp.model.Image;
 import com.gavruseva.webapp.service.ImageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +18,7 @@ public class ImageServiceImpl implements ImageService {
       }
       logger.warn("Such image doesn't exist");
       throw new ServiceException("Such image doesn't exist");
-    } catch (DAOException e){
+    } catch (DaoException e){
       throw new ServiceException(e);
     }
   }
