@@ -35,12 +35,14 @@ public class LoginCommand implements Command {
     Optional<String> login = of(request).map(httpServletRequest -> httpServletRequest.getParameter(LOGIN));
     Optional<String> password = of(request).map(httpServletRequest -> httpServletRequest.getParameter(PASSWORD));
     if (login.get().isEmpty() || password.get().isEmpty()) {
-      return forwardLoginWithError(request, ERROR_MESSAGE, ERROR_MESSAGE_TEXT);
+      request.setAttribute(ERROR_MESSAGE, ERROR_MESSAGE_TEXT);
+      return new CommandResult(Page.LOGIN_PAGE.getPage(), false);
     }
     isUserFind = initializeUserIfExist(login.get(), password.get(), request);
     if (!isUserFind) {
       logger.info("User with such login and password doesn't exist");
-      return forwardLoginWithError(request, ERROR_MESSAGE, AUTHENTICATION_ERROR_TEXT);
+      request.setAttribute(ERROR_MESSAGE, AUTHENTICATION_ERROR_TEXT);
+      return new CommandResult(Page.LOGIN_PAGE.getPage(), false);
     } else {
       logger.info("user has been authorized: login: {}, password: {}", login, password);
       return new CommandResult(COMMAND_WELCOME, false);
@@ -61,10 +63,5 @@ public class LoginCommand implements Command {
       throw new CommandException(e);
     }
     return userExist;
-  }
-
-  private CommandResult forwardLoginWithError(HttpServletRequest request, final String ERROR, final String ERROR_MESSAGE) {
-    request.setAttribute(ERROR, ERROR_MESSAGE);
-    return new CommandResult(Page.LOGIN_PAGE.getPage(), false);
   }
 }

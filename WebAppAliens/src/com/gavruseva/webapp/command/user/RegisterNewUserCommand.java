@@ -27,7 +27,8 @@ public class RegisterNewUserCommand implements Command {
     Optional<String> password = of(request).map(httpServletRequest -> httpServletRequest.getParameter(PASSWORD_FOR_REGISTER));
     if (login.get().isEmpty() || password.get().isEmpty()) {
       logger.info("invalid login or password format was received:" + login + " " + password);
-      return forwardToRegisterWithError(request, REGISTER_ERROR, ERROR_MESSAGE_TEXT);
+      request.setAttribute(REGISTER_ERROR, REGISTER_ERROR_MESSAGE_IF_EXIST);
+      return new CommandResult(Page.REGISTER_PAGE.getPage(), false);
     }
     User user = new User();
     user.setLogin(login.get());
@@ -37,10 +38,11 @@ public class RegisterNewUserCommand implements Command {
       int userCount = userServiceImpl.save(user);
       if (userCount != 0) {
         logger.info("User was registered: login:" + login + " password:" + password);
-        return forwardToLogin(request);
+        return new CommandResult(Page.LOGIN_PAGE.getPage(), false);
       } else {
         logger.info("invalid login or password format was received:" + login + " " + password);
-        return forwardToRegisterWithError(request, REGISTER_ERROR, REGISTER_ERROR_MESSAGE_IF_EXIST);
+        request.setAttribute(REGISTER_ERROR, REGISTER_ERROR_MESSAGE_IF_EXIST);
+        return new CommandResult(Page.REGISTER_PAGE.getPage(), false);
       }
     } catch(ServiceException e){
       logger.error("Error occurred while saving a new user", e);
@@ -48,12 +50,4 @@ public class RegisterNewUserCommand implements Command {
     }
   }
 
-  private CommandResult forwardToRegisterWithError(HttpServletRequest request, String ERROR, String ERROR_MESSAGE) {
-    request.setAttribute(ERROR, ERROR_MESSAGE);
-    return new CommandResult(Page.REGISTER_PAGE.getPage(), false);
-  }
-
-  private CommandResult forwardToLogin(HttpServletRequest request) {
-    return new CommandResult(Page.LOGIN_PAGE.getPage(), false);
-  }
 }

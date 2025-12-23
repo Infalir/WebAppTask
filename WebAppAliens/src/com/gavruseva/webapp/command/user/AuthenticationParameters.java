@@ -1,6 +1,6 @@
 package com.gavruseva.webapp.command.user;
 
-public class AuthenticationParameters {
+public final class AuthenticationParameters {
   public final static String LOGIN = "loginName";
   public final static String PASSWORD = "password";
 
@@ -13,4 +13,8 @@ public class AuthenticationParameters {
 
   public final static String NAME_FOR_REGISTER = "newLoginName";
   public final static String PASSWORD_FOR_REGISTER = "newPassword";
+
+  private AuthenticationParameters() {
+    super();
+  }
 }

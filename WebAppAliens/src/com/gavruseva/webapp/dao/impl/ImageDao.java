@@ -18,14 +18,23 @@ import java.util.Optional;
 
 public class ImageDao implements BaseDao<Image> {
   private static final Logger logger = LogManager.getLogger();
+  private static ImageDao instance;
   private static final String FIND_BY_ID_QUERY = "SELECT id, pictire_path, name, length, width, price FROM images WHERE id = ? LIMIT 1";
   private static final String INSERT_QUERY = "INSERT INTO images (pictire_path, name, length, width, price) VALUES (?, ?, ?, ?, ?)";
   private static final String DELETE_QUERY = "DELETE FROM images WHERE id = ?";
   private static final String UPDATE_QUERY = "UPDATE images SET pictire_path = ?, name = ?, length = ?, price = ?, width = ? WHERE id = ?";
   private static final String GET_ALL_QUERY = "SELECT id, pictire_path, name, length, width, price FROM images";
 
+  public static ImageDao getInstance() {
+    if (instance == null) {
+      instance = new ImageDao();
+    }
+    return instance;
+  }
+
+
   @Override
-  public Optional<Image> findById(Long id) throws DAOException, ConnectionException {
+  public Optional<Image> findById(Long id) throws DAOException {
     Image image = null;
 
     try (PreparedStatement pStmt = ConnectionPool.getInstance().getConnection().prepareStatement(FIND_BY_ID_QUERY)) {

@@ -51,19 +51,16 @@ public class Controller extends HttpServlet {
       }
       String page = commandResult.getPage();
       if (commandResult.isRedirect()) {
-        sendRedirect(response, page);
+        response.sendRedirect(page);
       } else {
-        dispatch(request, response, page);
+        forward(request, response, page);
       }
     }
 
-    private void dispatch(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException {
+    private void forward(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException {
       ServletContext servletContext = getServletContext();
       RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(page);
       requestDispatcher.forward(request, response);
     }
 
-    private void sendRedirect(HttpServletResponse response, String page) throws IOException {
-      response.sendRedirect(page);
-    }
 }
